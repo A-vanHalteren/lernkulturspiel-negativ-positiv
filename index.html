@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lernkultur-Spiel – Vom Negativen zum Positiven</title>
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: grid; place-items: center;
+      padding: 24px; background: #f3f5f4;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #24332f;
+    }
+    main {
+      width: min(100%, 680px); background: white; border: 1px solid #dce5e1;
+      border-radius: 20px; padding: clamp(24px, 5vw, 40px);
+      box-shadow: 0 12px 35px rgba(30, 55, 45, .08);
+    }
+    .symbol { font-size: 2rem; margin-bottom: 12px; }
+    h1 { font-size: clamp(1.5rem, 4vw, 2rem); line-height: 1.2; margin: 0 0 14px; }
+    p { line-height: 1.6; }
+    .hint { color: #52635d; font-size: .95rem; }
+    button {
+      width: 100%; border: 0; border-radius: 12px; padding: 16px 20px;
+      background: #285e50; color: white; font-size: 1rem; font-weight: 700;
+      cursor: pointer; margin-top: 14px;
+    }
+    button:hover { background: #1e493e; }
+    button:focus-visible { outline: 3px solid #e2a83b; outline-offset: 3px; }
+    #status { min-height: 1.5em; font-weight: 600; color: #285e50; }
+    details { margin-top: 20px; }
+    summary { cursor: pointer; font-weight: 600; }
+    textarea {
+      width: 100%; min-height: 260px; margin-top: 12px; padding: 12px;
+      border: 1px solid #cbd7d1; border-radius: 8px; font: inherit; font-size: .9rem;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="symbol" aria-hidden="true">🎲</div>
+    <h1>Lernkultur-Spiel: Vom Negativen zum Positiven</h1>
+    <p>Verwandelt herausfordernde Lernkultur-Merkmale in konkrete Ideen für euer Mathematikseminar.</p>
+    <p class="hint">Kopiert den Prompt mit einem Klick. Fügt ihn anschließend in ein KI-Tool eurer Wahl ein und sendet ihn ab.</p>
+    <button id="copyButton" type="button">Spiel-Prompt kopieren</button>
+    <p id="status" role="status" aria-live="polite"></p>
+    <details>
+      <summary>Prompt anzeigen</summary>
+      <textarea id="promptText" readonly></textarea>
+    </details>
+  </main>
+  <script>
+    const promptText = "Du begleitest eine Gruppe in einem Spiel zur kreativen Auseinandersetzung mit förderlicher Lernkultur in ihrem Mathematikseminar.\n\nDie Gruppe hat zwei Listen mit jeweils sechs Begriffen erstellt:\n- Eine „Negativliste“ mit typischen Merkmalen schlechter Lernkultur.\n- Eine „Positivliste“ mit Merkmalen guter, zukunftsfähiger Lernkultur.\n\nDer Ablauf des Spiels ist wie folgt:\n\n1. Eine Person würfelt mit zwei Würfeln – für sich.\n2. Sie nutzt die beiden Zahlen, um jeweils einen Begriff aus der Negativliste und der Positivliste auszuwählen.\n3. **Nur die beiden ausgewählten Begriffe werden dir genannt.** Die Zahlen bleiben für dich irrelevant.\n4. Wenn die beiden Begriffe genannt wurden, reagierst du:\n   - Formuliere **drei kurze, kreative Ideen**, wie man in der Praxis vom negativen zum positiven Zustand kommen könnte – oder wie man den positiven Aspekt noch weiter stärken kann.\n   - Die Ideen dürfen unterschiedlich sein (z. B. ein Impuls, eine Methode, ein Perspektivwechsel) – aber alle sollen umsetzbar oder inspirierend sein. Orientiere dich dabei im Kontext pädagogischer Leitbilder wie Nachhaltigkeit, Kollaboration, Selbstwirksamkeit, Resilienz, Offenheit und Vielfalt. \n5. Fordere die Person auf, **eine Idee – entweder eine deiner Vorschläge oder eine eigene – in das erste Feld eines zuvor vorbereiteten Blattes zu schreiben.**. Frage dann, ob es weiter gehen kann.\n6. Sobald die Person „weiter“ sagt, sprichst du die nächste Person an und forderst sie auf, **zu würfeln, zwei Begriffe zu wählen und dir diese mitzuteilen.**\n7. Ab der **dritten Person**, frage zusätzlich: „Gibt es noch jemanden?“ oder „Ist die Zeit vielleicht schon vorbei?“\n8. Wenn niemand mehr antwortet oder das Spiel endet: Bedanke dich freundlich für die Teilnahme und verabschiede dich.\n\nWichtig:\n- Du bekommst **immer nur zwei Begriffe** genannt – du arbeitest **nicht mit den Würfelzahlen**.\n- Deine drei Ideen sollen klar, unterschiedlich und inspirierend sein – keine langen Erklärungen, sondern Impulse zum Weiterdenken.\n- Bleibe im Ton freundlich, offen und ermutigend.\n\nBeginne jetzt mit einer kurzen Begrüßung und fordere die erste Person auf, zu würfeln, ihre zwei Begriffe aus den Listen zu wählen und sie dir mitzuteilen.";
+    const textArea = document.getElementById("promptText");
+    textArea.value = promptText;
+    document.getElementById("copyButton").addEventListener("click", async () => {
+      const status = document.getElementById("status");
+      try {
+        await navigator.clipboard.writeText(promptText);
+        status.textContent = "Der Prompt wurde kopiert. Jetzt im KI-Tool einfügen.";
+      } catch (error) {
+        textArea.focus();
+        textArea.select();
+        const copied = document.execCommand("copy");
+        status.textContent = copied
+          ? "Der Prompt wurde kopiert. Jetzt im KI-Tool einfügen."
+          : "Das automatische Kopieren hat nicht geklappt. Bitte den angezeigten Prompt markieren und kopieren.";
+      }
+    });
+  </script>
+</body>
+</html>
